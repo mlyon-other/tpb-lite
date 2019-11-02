@@ -1,5 +1,6 @@
 import re
 from bs4 import BeautifulSoup
+from .utils import Query
 
 
 def fileSizeStrToInt(size_str):

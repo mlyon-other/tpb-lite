@@ -8,7 +8,7 @@ class Query(object):
     Query object capable of getting html response given 
     a search query and other parameters.
     '''
-    def __init__(self, query, base_url='https://tpb.party', page=0, order=99, category=0):
+    def __init__(self, query, base_url, page, order, category):
         self.base_url = base_url
         segments = ('search', query, str(page), str(order), str(category))
         self.url = URL(base_url, segments)
