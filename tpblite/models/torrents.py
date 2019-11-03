@@ -63,8 +63,8 @@ class Torrents(object):
     torrent list or dict. Has methods to select items from
     torrent list.
     '''
-    def __init__(self, webpage):
-        self.webpage = webpage
+    def __init__(self, html_source):
+        self.html_source = html_source
         self.list = self._createTorrentList()
         
     def __str__(self):
@@ -74,7 +74,7 @@ class Torrents(object):
         return iter(self.list)    
         
     def _createTorrentList(self):
-        soup = BeautifulSoup(self.webpage, features='html.parser')
+        soup = BeautifulSoup(self.html_source, features='html.parser')
         rows = self.__getRows(soup)
         torrents = []
         for row in rows:
