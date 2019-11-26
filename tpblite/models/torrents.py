@@ -91,6 +91,7 @@ class Torrents(object):
         return rows
     
     def getBestTorrent(self, min_seeds=30, min_filesize='1 GiB', max_filesize='4 GiB'):
+        '''TODO: handle if this is 0'''
         if not type(min_filesize) == 'int':
             min_filesize = fileSizeStrToInt(min_filesize)
         if not type(max_filesize) == 'int':
