@@ -86,8 +86,6 @@ class Torrents(object):
         '''
         rows = soup.body.find_all('tr')
         # remove first and last entries
-        print(len(rows))
-        print(rows)
         del rows[0]
         del rows[-1]
         return rows
