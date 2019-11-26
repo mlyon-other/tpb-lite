@@ -10,7 +10,6 @@ class Query(object):
     '''
     def __init__(self, query, base_url, page, order, category):
         self.base_url = base_url
-        print('category is {} {}'.format(category,str(category)))
         segments = ('search', query, str(page), str(order), str(category))
         self.url = URL(base_url, segments)
         self.html_source = self._sendRequest()

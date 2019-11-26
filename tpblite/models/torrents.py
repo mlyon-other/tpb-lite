@@ -82,8 +82,12 @@ class Torrents(object):
         return torrents
         
     def __getRows(self, soup):
+        '''TODO: if length of rows = 1, then no search results
+        '''
         rows = soup.body.find_all('tr')
         # remove first and last entries
+        print(len(rows))
+        print(rows)
         del rows[0]
         del rows[-1]
         return rows

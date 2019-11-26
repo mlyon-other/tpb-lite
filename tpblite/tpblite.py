@@ -14,10 +14,3 @@ class TPB(object):
         q = Query(query, self.base_url, page, order, category)
         self.search_url = q.url
         return Torrents(q.html_source)
-        
-def run():
-    q = Query('avengers endgame 1080p')
-    print(q.url)
-    t = Torrents(q.webpage)
-    torrent = t.getBestTorrent()
-    print(torrent.magnetlink)
