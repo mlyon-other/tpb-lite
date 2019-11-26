@@ -82,23 +82,32 @@ class Torrents(object):
         return torrents
         
     def __getRows(self, soup):
-        '''TODO: if length of rows = 1, then no search results
-        '''
         rows = soup.body.find_all('tr')
         # remove first and last entries
-        del rows[0]
-        del rows[-1]
-        return rows
+        if len(rows) > 1:
+            del rows[0]
+            del rows[-1]
+            return rows
+        else:
+            print('No torrents found!')
+            return []
     
     def getBestTorrent(self, min_seeds=30, min_filesize='1 GiB', max_filesize='4 GiB'):
-        '''TODO: handle if this is 0'''
+        '''Filters torrent list based on some constraints, then returns highest seeded torrent
+        :param min_seeds (int): minimum seed number filter
+        :param min_filesize (str): minimum filesize in XiB form, eg. GiB
+        :param max_filesize (str): maximum filesize in XiB form, eg. GiB
+        :return Torrent Object: Torrent with highest seed number, will return None if all are filtered out'''
         if not type(min_filesize) == 'int':
             min_filesize = fileSizeStrToInt(min_filesize)
         if not type(max_filesize) == 'int':
             max_filesize = fileSizeStrToInt(max_filesize)
         filtered_list = filter(lambda x: self._filterTorrent(x, min_seeds, min_filesize, max_filesize), self.list)
         sorted_list = sorted(filtered_list, key=lambda x: x.seeds, reverse=True)
-        return sorted_list[0]
+        if len(sorted_list) > 0:
+            return sorted_list[0]
+        else:
+            return None
         
     def _filterTorrent(self, torrent, min_seeds, min_filesize, max_filesize):
         if (torrent.seeds < min_seeds) or (torrent.filesize_int < min_filesize) or (torrent.filesize_int > max_filesize):
