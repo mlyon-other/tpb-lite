@@ -1,5 +1,7 @@
 import re
+import unicodedata
 from bs4 import BeautifulSoup
+
 from .utils import Query
 
 
@@ -27,7 +29,6 @@ class Torrent(object):
         self.title = self._getTitle()
         self.seeds, self.leeches = self._getPeers()
         self.uploaded, self.filesize, self.byte_size, self.uploader = self._getFileInfo()
-        self.filesize_int = fileSizeStrToInt(self.filesize)
         self.magnetlink = self._getMagnetLink()
         
     def __str__(self):
@@ -35,6 +36,9 @@ class Torrent(object):
                                                          self.seeds,
                                                          self.leeches,
                                                          self.filesize)
+        
+    def __repr__(self):
+        return '<Torrent object: {}>'.format(self.title)
     
     def _getTitle(self):
         return self.html_row.find('a', class_='detLink').string
@@ -46,10 +50,10 @@ class Torrent(object):
     def _getFileInfo(self):
         text = self.html_row.find('font', class_='detDesc').get_text()
         t = text.split(',')
-        uptime = t[0].replace('Uploaded ','')
-        size = t[1].replace('Size ', '')
+        uptime = unicodedata.normalize('NFKD', t[0].replace('Uploaded ','').strip())
+        size = unicodedata.normalize('NFKD', t[1].replace('Size ', '').strip())
         byte_size = fileSizeStrToInt(size)
-        uploader = t[2].replace('ULed by ', '').strip()
+        uploader = unicodedata.normalize('NFKD', t[2].replace('ULed by ', '').strip())
         return uptime, size, byte_size, uploader
     
     def _getMagnetLink(self):
@@ -68,7 +72,10 @@ class Torrents(object):
         self.list = self._createTorrentList()
         
     def __str__(self):
-        return 'Torrents Object: {0} torrents'.format(len(self.list))
+        return 'Torrents object: {} torrents'.format(len(self.list))
+    
+    def __repr__(self):
+        return '<Torrents object: {} torrents>'.format(len(self.list))
         
     def __iter__(self):
         return iter(self.list)    
@@ -107,10 +114,11 @@ class Torrents(object):
         if len(sorted_list) > 0:
             return sorted_list[0]
         else:
+            print('No torrents found given criteria')
             return None
         
     def _filterTorrent(self, torrent, min_seeds, min_filesize, max_filesize):
-        if (torrent.seeds < min_seeds) or (torrent.filesize_int < min_filesize) or (torrent.filesize_int > max_filesize):
+        if (torrent.seeds < min_seeds) or (torrent.byte_size < min_filesize) or (torrent.byte_size > max_filesize):
             return False
         else:
             return True
