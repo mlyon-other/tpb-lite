@@ -26,10 +26,10 @@ class Torrent(object):
     '''
     def __init__(self, html_row):
         self.html_row = html_row
-        self.title = self._getTitle()
+        self.__title = None
+        self.__magnetlink = None
         self.seeds, self.leeches = self._getPeers()
         self.uploaded, self.filesize, self.byte_size, self.uploader = self._getFileInfo()
-        self.magnetlink = self._getMagnetLink()
         
     def __str__(self):
         return '{0}, S: {1}, L: {2}, {3}'.format(self.title,
@@ -40,8 +40,20 @@ class Torrent(object):
     def __repr__(self):
         return '<Torrent object: {}>'.format(self.title)
     
-    def _getTitle(self):
-        return self.html_row.find('a', class_='detLink').string
+    #TODO: finish implementing @property tags
+
+    @property
+    def title(self):
+        if self.__title == None:
+            self.__title = self.html_row.find('a', class_='detLink').string
+        return self.__title
+
+    @property
+    def magnetlink(self):
+        if self.__magnetlink == None:
+            tag = self.html_row.find('a', href=(re.compile('magnet')))
+            self.__magnetlink = tag.get('href')
+        return self.__magnetlink
     
     def _getPeers(self):
         taglist = self.html_row.find_all('td', align='right')
@@ -56,10 +68,6 @@ class Torrent(object):
         uploader = unicodedata.normalize('NFKD', t[2].replace('ULed by ', '').strip())
         return uptime, size, byte_size, uploader
     
-    def _getMagnetLink(self):
-        tag = self.html_row.find('a', href=(re.compile('magnet')))
-        link = tag.get('href')
-        return link
     
 class Torrents(object):
     '''
@@ -78,7 +86,10 @@ class Torrents(object):
         return '<Torrents object: {} torrents>'.format(len(self.list))
         
     def __iter__(self):
-        return iter(self.list)    
+        return iter(self.list)
+
+    def __len__(self):
+        return len(self.list)
         
     def _createTorrentList(self):
         soup = BeautifulSoup(self.html_source, features='html.parser')
