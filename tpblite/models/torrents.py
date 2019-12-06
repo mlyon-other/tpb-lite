@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 from .utils import Query
 
+#TODO: implement a pretty print for Torrents object
 
 def fileSizeStrToInt(size_str):
     '''Converts file size given in *iB format to bytes integer'''
@@ -101,10 +102,12 @@ class Torrents(object):
         
     def __getRows(self, soup):
         rows = soup.body.find_all('tr')
-        # remove first and last entries
+        # remove first entry (header)
         if len(rows) > 1:
             del rows[0]
-            del rows[-1]
+            if len(rows) == 31:
+                # last row is bottom of page
+                del rows[-1]
             return rows
         else:
             print('No torrents found!')
