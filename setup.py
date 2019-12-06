@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='tpblite',
-        version='0.1.1',
+        version='0.1.2',
         description='The Unofficial Pirate Bay Lightweight Python API',
         author='Matt Lyon',
         author_email='matthewlyon18@gmail.com',

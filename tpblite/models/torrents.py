@@ -110,7 +110,6 @@ class Torrents(object):
                 del rows[-1]
             return rows
         else:
-            print('No torrents found!')
             return []
     
     def getBestTorrent(self, min_seeds=30, min_filesize='1 GiB', max_filesize='4 GiB'):
