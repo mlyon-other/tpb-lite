@@ -3,7 +3,7 @@ from urllib.request import Request, urlopen
 from purl import URL as pURL
 
 
-class Query(object):
+class QueryParser(object):
     '''
     Query object capable of getting html response given 
     a search query and other parameters.

@@ -2,9 +2,8 @@ import re
 import unicodedata
 from bs4 import BeautifulSoup
 
-from .utils import Query
-
 #TODO: implement a pretty print for Torrents object
+#TODO: write better comments
 
 def fileSizeStrToInt(size_str):
     '''Converts file size given in *iB format to bytes integer'''
@@ -27,10 +26,10 @@ class Torrent(object):
     '''
     def __init__(self, html_row):
         self.html_row = html_row
-        self.__title = None
-        self.__magnetlink = None
+        self.title = self._getTitle()
         self.seeds, self.leeches = self._getPeers()
-        self.uploaded, self.filesize, self.byte_size, self.uploader = self._getFileInfo()
+        self.upload_date, self.filesize, self.byte_size, self.uploader = self._getFileInfo()
+        self.magnetlink = self._getMagnetLink()
         
     def __str__(self):
         return '{0}, S: {1}, L: {2}, {3}'.format(self.title,
@@ -40,21 +39,14 @@ class Torrent(object):
         
     def __repr__(self):
         return '<Torrent object: {}>'.format(self.title)
-    
-    #TODO: finish implementing @property tags
 
-    @property
-    def title(self):
-        if self.__title == None:
-            self.__title = self.html_row.find('a', class_='detLink').string
-        return self.__title
+    def _getTitle(self):
+        return self.html_row.find('a', class_='detLink').string
 
-    @property
-    def magnetlink(self):
-        if self.__magnetlink == None:
-            tag = self.html_row.find('a', href=(re.compile('magnet')))
-            self.__magnetlink = tag.get('href')
-        return self.__magnetlink
+    def _getMagnetLink(self):
+        tag = self.html_row.find('a', href=(re.compile('magnet')))
+        link = tag.get('href')
+        return link
     
     def _getPeers(self):
         taglist = self.html_row.find_all('td', align='right')
@@ -76,9 +68,12 @@ class Torrents(object):
     torrent list or dict. Has methods to select items from
     torrent list.
     '''
-    def __init__(self, html_source):
+    def __init__(self, search_str, html_source):
+        self.search_str = search_str
+        self.__search_set = None
+        
         self.html_source = html_source
-        self.list = self._createTorrentList()
+        self.list = self._createTorrentListMod()
         
     def __str__(self):
         return 'Torrents object: {} torrents'.format(len(self.list))
@@ -91,6 +86,12 @@ class Torrents(object):
 
     def __len__(self):
         return len(self.list)
+
+    @property
+    def search_set(self):
+        if self.__search_set == None:
+            self.__search_set = set(filter(None, re.split(r'[\s.|\(|\)]',self.search_str.lower())))
+        return self.__search_set
         
     def _createTorrentList(self):
         soup = BeautifulSoup(self.html_source, features='html.parser')
@@ -98,6 +99,18 @@ class Torrents(object):
         torrents = []
         for row in rows:
             torrents.append(Torrent(row))
+        return torrents
+
+    def _createTorrentListMod(self):
+        soup = BeautifulSoup(self.html_source, features='html.parser')
+        rows = soup.body.find_all('tr')
+        torrents = []
+        for row in rows:
+            # Get the lowercase unique set from the row text
+            text_set = set(filter(None, re.split(r'[\s.|\(|\)]',row.text.lower())))
+            # Check if search string is subset
+            if self.search_set.issubset(text_set):
+                torrents.append(Torrent(row))
         return torrents
         
     def __getRows(self, soup):
@@ -111,6 +124,7 @@ class Torrents(object):
             return rows
         else:
             return []
+
     
     def getBestTorrent(self, min_seeds=30, min_filesize='1 GiB', max_filesize='4 GiB'):
         '''Filters torrent list based on some constraints, then returns highest seeded torrent
