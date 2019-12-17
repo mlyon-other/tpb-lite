@@ -2,7 +2,6 @@ import re
 import unicodedata
 from bs4 import BeautifulSoup
 
-#TODO: implement a pretty print for Torrents object
 #TODO: write better comments
 
 def fileSizeStrToInt(size_str):
@@ -73,7 +72,7 @@ class Torrents(object):
         self.__search_set = None
         
         self.html_source = html_source
-        self.list = self._createTorrentListMod()
+        self.list = self._createTorrentList()
         
     def __str__(self):
         return 'Torrents object: {} torrents'.format(len(self.list))
@@ -87,21 +86,16 @@ class Torrents(object):
     def __len__(self):
         return len(self.list)
 
+    def __getitem__(self,index):
+        return self.list[index]
+
     @property
-    def search_set(self):
+    def _search_set(self):
         if self.__search_set == None:
             self.__search_set = set(filter(None, re.split(r'[\s.|\(|\)]',self.search_str.lower())))
         return self.__search_set
-        
-    def _createTorrentList(self):
-        soup = BeautifulSoup(self.html_source, features='html.parser')
-        rows = self.__getRows(soup)
-        torrents = []
-        for row in rows:
-            torrents.append(Torrent(row))
-        return torrents
 
-    def _createTorrentListMod(self):
+    def _createTorrentList(self):
         soup = BeautifulSoup(self.html_source, features='html.parser')
         rows = soup.body.find_all('tr')
         torrents = []
@@ -109,7 +103,7 @@ class Torrents(object):
             # Get the lowercase unique set from the row text
             text_set = set(filter(None, re.split(r'[\s.|\(|\)]',row.text.lower())))
             # Check if search string is subset
-            if self.search_set.issubset(text_set):
+            if self._search_set.issubset(text_set):
                 torrents.append(Torrent(row))
         return torrents
         
