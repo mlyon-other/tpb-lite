@@ -3,12 +3,13 @@
 from setuptools import setup, find_packages
 
 setup(name = 'tpblite',
-        version = '0.2.0',
+        version = '0.2.1',
         description = 'The Unofficial Pirate Bay Lightweight Python API',
         author = 'Matt Lyon',
         author_email = 'matthewlyon18@gmail.com',
         python_requires = '>=3.6',
         url = 'https://github.com/mattlyon93/tpb-lite',
+        download_url = 'https://github.com/mattlyon93/tpb-lite/archive/v0.3.tar.gz',
         license = 'MIT License',
         packages = ['tpblite', 'tpblite/models'],
         install_requires = [
