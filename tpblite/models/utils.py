@@ -1,5 +1,6 @@
 import random
 from urllib.request import Request, urlopen
+import urllib.error
 from purl import URL as pURL
 
 
@@ -12,7 +13,10 @@ class QueryParser(object):
         self.base_url = base_url
         segments = ('search', query, str(page), str(order), str(category))
         self.url = URL(base_url, segments)
-        self.html_source = self._sendRequest()
+        try:
+            self.html_source = self._sendRequest()
+        except urllib.error.URLError:
+            raise ConnectionError('Could not establish connection wtih {}'.format(self.base_url))
      
     def _sendRequest(self):
         req = Request(self.url, headers=headers())
@@ -51,5 +55,3 @@ USER_AGENTS = (
     'AppleWebKit/537.36 (KHTML, like Gecko) '
     'Chrome/60.0.3112.113 Safari/537.36',
 )
-
-### ====================

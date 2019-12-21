@@ -32,9 +32,9 @@ class Torrent(object):
         
     def __str__(self):
         return '{0}, S: {1}, L: {2}, {3}'.format(self.title,
-                                                         self.seeds,
-                                                         self.leeches,
-                                                         self.filesize)
+                                                self.seeds,
+                                                self.leeches,
+                                                self.filesize)
         
     def __repr__(self):
         return '<Torrent object: {}>'.format(self.title)
@@ -91,12 +91,14 @@ class Torrents(object):
 
     @property
     def _search_set(self):
-        if self.__search_set == None:
+        if self.__search_set is None:
             self.__search_set = set(filter(None, re.split(r'[\s.|\(|\)]',self.search_str.lower())))
         return self.__search_set
 
     def _createTorrentList(self):
         soup = BeautifulSoup(self.html_source, features='html.parser')
+        if soup.body is None:
+            raise ConnectionError('Could not determine torrents (empty html body)')
         rows = soup.body.find_all('tr')
         torrents = []
         for row in rows:
@@ -106,19 +108,6 @@ class Torrents(object):
             if self._search_set.issubset(text_set):
                 torrents.append(Torrent(row))
         return torrents
-        
-    def __getRows(self, soup):
-        rows = soup.body.find_all('tr')
-        # remove first entry (header)
-        if len(rows) > 1:
-            del rows[0]
-            if len(rows) == 31:
-                # last row is bottom of page
-                del rows[-1]
-            return rows
-        else:
-            return []
-
     
     def getBestTorrent(self, min_seeds=30, min_filesize='1 GiB', max_filesize='4 GiB'):
         '''Filters torrent list based on some constraints, then returns highest seeded torrent
@@ -126,9 +115,9 @@ class Torrents(object):
         :param min_filesize (str): minimum filesize in XiB form, eg. GiB
         :param max_filesize (str): maximum filesize in XiB form, eg. GiB
         :return Torrent Object: Torrent with highest seed number, will return None if all are filtered out'''
-        if not type(min_filesize) == 'int':
+        if not isinstance(min_filesize, int):
             min_filesize = fileSizeStrToInt(min_filesize)
-        if not type(max_filesize) == 'int':
+        if not isinstance(max_filesize, int):
             max_filesize = fileSizeStrToInt(max_filesize)
         filtered_list = filter(lambda x: self._filterTorrent(x, min_seeds, min_filesize, max_filesize), self.list)
         sorted_list = sorted(filtered_list, key=lambda x: x.seeds, reverse=True)

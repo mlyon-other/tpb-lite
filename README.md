@@ -70,7 +70,7 @@ You can see how many `Torrent` objects your query has returned, by using the `le
 Example Workflow
 ==========
 
-With a commandline torrent client such as [aria2](), you can automate search and downloading of torrents like so:
+With a commandline torrent client such as [aria2](https://aria2.github.io/), you can automate search and downloading of torrents like so:
 ```python
 import subprocess
 from tpblite import TPB
