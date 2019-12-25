@@ -29,12 +29,14 @@ class TPB:
 
         Args:
             query: Search string to query ThePirateBay
-            page: page number to grab results from
-            order TODO
-            category TODO
+            page: Page number to grab results from
+            order: Order of results, default is ascending. List of possible options found in
+                tpblite.models.constants.ORDERS
+            category: Restrict search to specific category, for list of categories see
+                tpblite.models.constants.CATEGORIES
 
         Return:
-            Torrents
+            Torrents object
 
         """
         q = QueryParser.search(query, self.base_url, page, order, category)
@@ -46,12 +48,14 @@ class TPB:
 
         Args:
             query: Search string to query ThePirateBay
-            page: page number to grab results from
-            order TODO
-            category TODO
+            page: Page number to grab results from
+            order: Order of results, default is ascending. List of possible options found in
+                tpblite.models.constants.ORDERS
+            category: Restrict search to specific category, for list of categories see
+                tpblite.models.constants.CATEGORIES
 
         Return:
-            Torrent
+            Torrents object
 
         """
         q = QueryParser.browse(self.base_url, category, page, order)

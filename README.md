@@ -48,9 +48,21 @@ torrent = torrents[3]
 print(torrent.magnetlink)
 ```
 ## Browse
-Alternatively you can browse all of the torrents from a single category.
 ```python
+# You can browse all of the torrents from a single category
+torrents = t.browse(category=CATEGORIES.VIDEOS)
+# Customize the page number and sort order
 torrents = t.browse(category=CATEGORIES.VIDEO.MOVIES, page=1, order=ORDERS.UPLOADED.DES)
+```
+
+## Categories and Sort Order
+```python
+# To print all available categories, use the classmethod printOptions
+CATEGORIES.printOptions()
+# Or just a subset of categories, like VIDEOS
+CATEGORIES.VIDEO.printOptions()
+# Similarly for the sort order
+ORDERS.printOptions()
 ```
 
 ## Torrents object
