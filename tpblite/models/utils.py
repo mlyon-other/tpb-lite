@@ -1,8 +1,11 @@
-from typing import Tuple
+from typing import Tuple, TypeVar
 import random
 from urllib.request import Request, urlopen
 import urllib.error
 from purl import URL as pURL
+
+# https://github.com/python/typing/issues/58#issuecomment-326240794
+T = TypeVar("T", bound="QueryParser")
 
 
 class QueryParser:
@@ -27,14 +30,14 @@ class QueryParser:
             )
 
     @classmethod
-    def from_search(
+    def search(
         cls, query: str, base_url: str, page: int, order: int, category: int
-    ):
+    ) -> T:
         segments = ("search", query, str(page), str(order), str(category))
         return cls(base_url, segments)
 
     @classmethod
-    def from_browse(cls, base_url: str, category: int, page: int, order: int):
+    def browse(cls, base_url: str, category: int, page: int, order: int) -> T:
         segments = ("browse", str(category), str(page), str(order), "0")
         return cls(base_url, segments)
 
