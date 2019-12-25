@@ -1,4 +1,4 @@
-from typing import Tuple, TypeVar
+from typing import Tuple, Type, TypeVar
 import random
 from urllib.request import Request, urlopen
 import urllib.error
@@ -31,13 +31,13 @@ class QueryParser:
 
     @classmethod
     def search(
-        cls, query: str, base_url: str, page: int, order: int, category: int
+        cls: Type[T], query: str, base_url: str, page: int, order: int, category: int
     ) -> T:
         segments = ("search", query, str(page), str(order), str(category))
         return cls(base_url, segments)
 
     @classmethod
-    def browse(cls, base_url: str, category: int, page: int, order: int) -> T:
+    def browse(cls: Type[T], base_url: str, category: int, page: int, order: int) -> T:
         # The 0 is added to the URL to stay consistent with the manual web request
         segments = ("browse", str(category), str(page), str(order), "0")
         return cls(base_url, segments)

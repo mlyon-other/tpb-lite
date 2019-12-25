@@ -6,9 +6,6 @@ from .models.utils import QueryParser
 
 class TPB:
 
-    # PirateBay URL to use for queries
-    base_url: str
-
     def __init__(self, base_url: str = "https://tpb.party"):
         """ThePirateBay Object
 
@@ -16,6 +13,7 @@ class TPB:
             base_url (str): PirateBay URL to use for queries
 
         """
+        # PirateBay URL to use for queries
         self.base_url = base_url
 
         # Compiled search string used to query the PirateBay URL
@@ -26,7 +24,7 @@ class TPB:
 
     def search(
         self, query: str, page: int = 0, order: int = 99, category: int = 0
-    ) -> Torrent:
+    ) -> Torrents:
         """Search ThePirateBay and return list of Torrents
 
         Args:
@@ -36,14 +34,14 @@ class TPB:
             category TODO
 
         Return:
-            Torrent
+            Torrents
 
         """
-        q = QueryParser.from_search(query, self.base_url, page, order, category)
+        q = QueryParser.search(query, self.base_url, page, order, category)
         self._search_url = q.url
         return Torrents(q.html_source)
 
-    def browse(self, category: int = 0, page: int = 0, order: int = 99) -> Torrent:
+    def browse(self, category: int = 0, page: int = 0, order: int = 99) -> Torrents:
         """Browse ThePirateBay and return list of Torrents
 
         Args:
@@ -56,6 +54,6 @@ class TPB:
             Torrent
 
         """
-        q = QueryParser.from_browse(self.base_url, category, page, order)
+        q = QueryParser.browse(self.base_url, category, page, order)
         self._search_url = q.url
         return Torrents(q.html_source)
