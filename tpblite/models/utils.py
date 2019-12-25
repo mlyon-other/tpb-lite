@@ -38,6 +38,7 @@ class QueryParser:
 
     @classmethod
     def browse(cls, base_url: str, category: int, page: int, order: int) -> T:
+        # The 0 is added to the URL to stay consistent with the manual web request
         segments = ("browse", str(category), str(page), str(order), "0")
         return cls(base_url, segments)
 
