@@ -1,4 +1,4 @@
-from typing import Tuple, Type
+from typing import Tuple
 import random
 from urllib.request import Request, urlopen
 import urllib.error
@@ -35,9 +35,7 @@ class QueryParser:
 
     @classmethod
     def from_browse(cls, base_url: str, category: int, page: int, order: int):
-        print("browsing")
         segments = ("browse", str(category), str(page), str(order), "0")
-
         return cls(base_url, segments)
 
     def _sendRequest(self):
