@@ -9,10 +9,7 @@ class TPB:
     # PirateBay URL to use for queries
     base_url: str
 
-    # Compiled search string used to query the PirateBay URL
-    search_url: Optional[str]
-
-    def __init__(self, base_url="https://tpb.party"):
+    def __init__(self, base_url: str = "https://tpb.party"):
         """ThePirateBay Object
 
         Args:
@@ -20,7 +17,9 @@ class TPB:
 
         """
         self.base_url = base_url
-        self.search_url = None
+
+        # Compiled search string used to query the PirateBay URL
+        self._search_url: Optional[str] = None
 
     def __str__(self) -> str:
         return "TPB Object, base URL: {}".format(self.base_url)
@@ -41,12 +40,10 @@ class TPB:
 
         """
         q = QueryParser.from_search(query, self.base_url, page, order, category)
-        self.search_url = q.url
+        self._search_url = q.url
         return Torrents(q.html_source)
 
-    def browse(
-        self, category: int = 0, page: int = 0, order: int = 99
-    ) -> Torrent:
+    def browse(self, category: int = 0, page: int = 0, order: int = 99) -> Torrent:
         """Browse ThePirateBay and return list of Torrents
 
         Args:
@@ -60,5 +57,5 @@ class TPB:
 
         """
         q = QueryParser.from_browse(self.base_url, category, page, order)
-        self.search_url = q.url
+        self._search_url = q.url
         return Torrents(q.html_source)
