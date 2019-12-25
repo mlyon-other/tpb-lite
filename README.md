@@ -35,7 +35,7 @@ for torrent in torrents:
     print(torrent)
 
 # Customize your search
-from tpb import CATEGORIES, ORDERS
+from tpblite import CATEGORIES, ORDERS
 torrents = t.search('public domain', page=2, order=ORDERS.NAME.DEC, category=CATEGORIES.VIDEO.MOVIES)
 
 # Get the most seeded torrent based on a filter
@@ -47,6 +47,12 @@ torrent = torrents[3]
 # Get the magnet link for a torrent
 print(torrent.magnetlink)
 ```
+## Browse
+Alternatively you can browse all of the torrents from a single category.
+```python
+torrents = t.browse(category=CATEGORIES.VIDEO.MOVIES, page=1, order=ORDERS.UPLOADED.DES)
+```
+
 ## Torrents object
 The search function returns a `Torrents` object, which is a *list-like* collection of the torrents found.
 
