@@ -61,3 +61,19 @@ class TPB:
         q = QueryParser.browse(self.base_url, category, page, order)
         self._search_url = q.url
         return Torrents(q.html_source)
+
+    def top(self, category: int=0, last_48=False):
+        """Get the top torrents of a category and return a list of Torrents
+
+        Args:
+            category: Restrict search to specific category, for list of categories see
+                tpblite.models.constants.CATEGORIES
+            last_48: wether to fetch the top torrent in the last 48 hours or the overall top
+
+        Return:
+            Torrent object
+        """
+        q = QueryParser.top(self.base_url, category, last_48)
+        self._search_url = q.url
+        return Torrents(q.html_source)
+
