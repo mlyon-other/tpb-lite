@@ -1,5 +1,7 @@
 Unofficial Lightweight Python API for ThePirateBay
 
+[![PyPI version](https://badge.fury.io/py/tpblite.png)](https://badge.fury.io/py/tpblite) 
+
 Installation
 =============
 ```sh
