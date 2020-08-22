@@ -1,11 +1,10 @@
 from typing import Optional
 
-from .models.torrents import Torrents, Torrent
+from .models.torrents import Torrents
 from .models.utils import QueryParser
 
 
 class TPB:
-
     def __init__(self, base_url: str = "https://tpb.party"):
         """ThePirateBay Object
 
@@ -62,7 +61,7 @@ class TPB:
         self._search_url = q.url
         return Torrents(q.html_source)
 
-    def top(self, category: int=0, last_48=False):
+    def top(self, category: int = 0, last_48: bool = False):
         """Get the top torrents of a category and return a list of Torrents
 
         Args:
