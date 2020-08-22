@@ -44,8 +44,10 @@ class QueryParser:
 
     @classmethod
     def top(cls: Type[T], base_url: str, category: int, last_48: bool) -> T:
+        if category == 0:
+            category = "all"
         if last_48:
-            segments = ("top", '48h' + str(category))
+            segments = ("top", "48h" + str(category))
         else:
             segments = ("top", str(category))
         return cls(base_url, segments)
