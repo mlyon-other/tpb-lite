@@ -21,9 +21,7 @@ setup(name = 'tpblite',
         long_description_content_type='text/markdown',
         license = 'MIT License',
         packages = ['tpblite', 'tpblite/models'],
-        install_requires = [
-            'beautifulsoup4',
-            'purl'],
+        install_requires = ['lxml'],
         classifiers = [
             'Development Status :: 3 - Alpha',
             'Programming Language :: Python',

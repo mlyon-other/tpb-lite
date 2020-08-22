@@ -7,8 +7,7 @@ $ pip install tpblite
 ```
 
 Dependencies:
- - BeautifulSoup
- - purl
+ - lxml
 
 Usage
 ==========
