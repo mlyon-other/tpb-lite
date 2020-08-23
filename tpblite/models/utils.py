@@ -42,6 +42,16 @@ class QueryParser:
         segments = ("browse", str(category), str(page), str(order), "0")
         return cls(base_url, segments)
 
+    @classmethod
+    def top(cls: Type[T], base_url: str, category: int, last_48: bool) -> T:
+        if category == 0:
+            category = "all"
+        if last_48:
+            segments = ("top", "48h" + str(category))
+        else:
+            segments = ("top", str(category))
+        return cls(base_url, segments)
+
     def _sendRequest(self):
         req = Request(self.url, headers=headers())
         return urlopen(req).read()
