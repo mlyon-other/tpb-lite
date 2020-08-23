@@ -29,9 +29,12 @@ class Torrent:
         self.html_row = html_row
         self.title = self._getTitle()
         self.seeds, self.leeches = self._getPeers()
-        self.upload_date, self.filesize, self.byte_size, self.uploader = (
-            self._getFileInfo()
-        )
+        (
+            self.upload_date,
+            self.filesize,
+            self.byte_size,
+            self.uploader,
+        ) = self._getFileInfo()
         self.magnetlink = self._getMagnetLink()
         self.url = self._getUrl()
 

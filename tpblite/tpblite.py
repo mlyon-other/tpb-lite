@@ -75,4 +75,3 @@ class TPB:
         q = QueryParser.top(self.base_url, category, last_48)
         self._search_url = q.url
         return Torrents(q.html_source)
-
