@@ -57,6 +57,18 @@ torrents = t.browse(category=CATEGORIES.VIDEOS)
 torrents = t.browse(category=CATEGORIES.VIDEO.MOVIES, page=1, order=ORDERS.UPLOADED.DES)
 ```
 
+## Top
+```python
+from tpblite import TPB, CATEGORIES
+t = TPB()
+
+# Get the top recent torrents 
+torrents = t.top(CATEGORIES.GAMES.ALL)
+
+# Customize with category and restriction to torrents from the last 48h
+torrents = t.top(category=CATEGORIES.GAMES.ALL, last_48=True)
+```
+
 ## Categories and Sort Order
 ```python
 # To print all available categories, use the classmethod printOptions
@@ -76,6 +88,7 @@ You can see how many `Torrent` objects your query has returned, by using the `le
 
 ## Torrent object
 `Torrent` objects represent each torrent found in the `Torrents` class, they have the following attributes
+
 ### Attributes
 - `Torrent.title` - The name of the torrent (str)
 - `Torrent.seeds` - The number of seeders (int)
@@ -85,7 +98,6 @@ You can see how many `Torrent` objects your query has returned, by using the `le
 - `Torrent.filesize` - The filesize in *iB format, eg. 5 GiB (str)
 - `Torrent.byte_size` - The filesize in bytes of the torrent (int)
 - `Torrent.magnetlink` - magnetlink of the torrent (str)
-
 
 Example Workflow
 ==========
