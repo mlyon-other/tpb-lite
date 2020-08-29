@@ -29,10 +29,14 @@ class Torrent:
         self.html_row = html_row
         self.title = self._getTitle()
         self.seeds, self.leeches = self._getPeers()
-        self.upload_date, self.filesize, self.byte_size, self.uploader = (
-            self._getFileInfo()
-        )
+        (
+            self.upload_date,
+            self.filesize,
+            self.byte_size,
+            self.uploader,
+        ) = self._getFileInfo()
         self.magnetlink = self._getMagnetLink()
+        self.url = self._getUrl()
 
     def __str__(self):
         return "{0}, S: {1}, L: {2}, {3}".format(
@@ -63,10 +67,14 @@ class Torrent:
         uploader = unicodedata.normalize("NFKD", t[2].replace("ULed by ", "").strip())
         return uptime, size, byte_size, uploader
 
+    def _getUrl(self):
+        tag = self.html_row.find("a", class_="detLink")
+        return tag.get("href")
+
 
 class Torrents:
     """
-    Torrent object, takes query response and parses into 
+    Torrent object, takes query response and parses into
     torrent list or dict. Has methods to select items from
     torrent list.
     """

@@ -98,6 +98,7 @@ You can see how many `Torrent` objects your query has returned, by using the `le
 - `Torrent.filesize` - The filesize in *iB format, eg. 5 GiB (str)
 - `Torrent.byte_size` - The filesize in bytes of the torrent (int)
 - `Torrent.magnetlink` - magnetlink of the torrent (str)
+- `Torrent.url` - url of the torrent page (str)
 
 Example Workflow
 ==========

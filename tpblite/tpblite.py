@@ -61,7 +61,7 @@ class TPB:
         self._search_url = q.url
         return Torrents(q.html_source)
 
-    def top(self, category: int = 0, last_48: bool = False):
+    def top(self, category: int = 0, last_48: bool = False) -> Torrents:
         """Get the top torrents of a category and return a list of Torrents
 
         Args:
@@ -70,9 +70,8 @@ class TPB:
             last_48: wether to fetch the top torrent in the last 48 hours or the overall top
 
         Return:
-            Torrent object
+            Torrents object
         """
         q = QueryParser.top(self.base_url, category, last_48)
         self._search_url = q.url
         return Torrents(q.html_source)
-

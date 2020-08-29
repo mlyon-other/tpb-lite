@@ -1,16 +1,23 @@
-
 class OPTION:
     @classmethod
     def printOptions(cls):
-        for opt in [x for x in cls.__dict__.keys() if not (x.startswith('__') or x.startswith('printOptions'))]:
-            if hasattr(getattr(cls,opt),'__dict__'):
-                for sub_opt in [y for y in getattr(cls,opt).__dict__.keys() if not (y.startswith('__') or y.startswith('printOptions'))]:
-                    print('{}.{}'.format(opt,sub_opt))
+        for opt in [
+            x
+            for x in cls.__dict__.keys()
+            if not (x.startswith("__") or x.startswith("printOptions"))
+        ]:
+            if hasattr(getattr(cls, opt), "__dict__"):
+                for sub_opt in [
+                    y
+                    for y in getattr(cls, opt).__dict__.keys()
+                    if not (y.startswith("__") or y.startswith("printOptions"))
+                ]:
+                    print("{}.{}".format(opt, sub_opt))
             else:
                 print(opt)
 
-class ORDERS(OPTION):
 
+class ORDERS(OPTION):
     class NAME(OPTION):
         DES = 1
         ASC = 2
@@ -42,7 +49,7 @@ class ORDERS(OPTION):
 
 class CATEGORIES(OPTION):
     ALL = 0
-      
+
     class AUDIO(OPTION):
         ALL = 100
         MUSIC = 101
