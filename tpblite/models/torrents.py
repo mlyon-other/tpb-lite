@@ -1,7 +1,5 @@
 import unicodedata
-from lxml.etree import HTML
-
-# TODO: write better comments
+import lxml.etree as ET
 
 
 def fileSizeStrToInt(size_str):
@@ -97,7 +95,7 @@ class Torrents:
         return self.list[index]
 
     def _createTorrentList(self):
-        root = HTML(self.html_source)
+        root = ET.HTML(self.html_source)
         if root.find("body") is None:
             raise ConnectionError("Could not determine torrents (empty html body)")
         rows = root.xpath('//tr[td[@class="vertTh"]]')
