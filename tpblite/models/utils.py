@@ -1,8 +1,8 @@
 from typing import Tuple, Type, TypeVar
 import random
 from urllib.request import Request, urlopen
+from urllib.parse import urlparse, urlunparse, quote
 import urllib.error
-from purl import URL as pURL
 
 # https://github.com/python/typing/issues/58#issuecomment-326240794
 T = TypeVar("T", bound="QueryParser")
@@ -26,7 +26,7 @@ class QueryParser:
             self.html_source = self._sendRequest()
         except urllib.error.URLError:
             raise ConnectionError(
-                "Could not establish connection wtih {}".format(self.base_url)
+                "Could not establish connection with {}".format(self.url)
             )
 
     @classmethod
@@ -58,9 +58,9 @@ class QueryParser:
 
 
 def URL(base: str, segments: Tuple[str, ...]) -> str:
-    u = pURL().from_string(base)
-    url = u.path_segments(segments)
-    return url.as_string()
+    url = list(urlparse(base))
+    url[2] = '/'.join((quote(s) for s in segments))
+    return urlunparse(url)
 
 
 def headers():

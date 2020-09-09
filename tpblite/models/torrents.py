@@ -1,6 +1,5 @@
-import re
 import unicodedata
-from bs4 import BeautifulSoup
+from lxml.etree import HTML
 
 # TODO: write better comments
 
@@ -47,19 +46,18 @@ class Torrent:
         return "<Torrent object: {}>".format(self.title)
 
     def _getTitle(self):
-        return self.html_row.find("a", class_="detLink").string
+        return self.html_row.findtext('.//a[@class="detLink"]')
 
     def _getMagnetLink(self):
-        tag = self.html_row.find("a", href=(re.compile("magnet")))
-        link = tag.get("href")
-        return link
+        return self.html_row.xpath('.//a[starts-with(@href, "magnet")]/@href')[0]
 
     def _getPeers(self):
-        taglist = self.html_row.find_all("td", align="right")
-        return int(taglist[0].string), int(taglist[1].string)
+        taglist = self.html_row.xpath('.//td[@align="right"]/text()')
+        return int(taglist[0]), int(taglist[1])
 
     def _getFileInfo(self):
-        text = self.html_row.find("font", class_="detDesc").get_text()
+        text = self.html_row.xpath('.//font[@class="detDesc"]/descendant::text()')
+        text = ''.join(text)
         t = text.split(",")
         uptime = unicodedata.normalize("NFKD", t[0].replace("Uploaded ", "").strip())
         size = unicodedata.normalize("NFKD", t[1].replace("Size ", "").strip())
@@ -68,7 +66,7 @@ class Torrent:
         return uptime, size, byte_size, uploader
 
     def _getUrl(self):
-        tag = self.html_row.find("a", class_="detLink")
+        tag = self.html_row.find('.//a[@class="detLink"]')
         return tag.get("href")
 
 
@@ -99,14 +97,13 @@ class Torrents:
         return self.list[index]
 
     def _createTorrentList(self):
-        soup = BeautifulSoup(self.html_source, features="html.parser")
-        if soup.body is None:
+        root = HTML(self.html_source)
+        if root.find("body") is None:
             raise ConnectionError("Could not determine torrents (empty html body)")
-        rows = soup.body.find_all("tr")
+        rows = root.xpath('//tr[td[@class="vertTh"]]')
         torrents = []
         for row in rows:
-            if len(row.find_all("td", {"class": "vertTh"})) == 1:
-                torrents.append(Torrent(row))
+            torrents.append(Torrent(row))
         return torrents
 
     def getBestTorrent(self, min_seeds=30, min_filesize="1 GiB", max_filesize="4 GiB"):
