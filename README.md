@@ -1,4 +1,5 @@
-Unofficial Lightweight Python API for ThePirateBay
+# Unofficial Lightweight Python API for ThePirateBay
+
 [![Build Status](https://travis-ci.com/mattlyon93/tpb-lite.svg?branch=master)](https://travis-ci.com/mattlyon93/tpb-lite) [![Coverage Status](https://coveralls.io/repos/github/mattlyon93/tpb-lite/badge.svg?branch=master)](https://coveralls.io/github/mattlyon93/tpb-lite?branch=master) [![PyPI version](https://badge.fury.io/py/tpblite.png)](https://badge.fury.io/py/tpblite) 
 
 Installation
