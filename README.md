@@ -23,6 +23,7 @@ t = TPB('https://thepiratebay.org')
 # Or create a TPB object with default domain
 t = TPB()
 ```
+**N.B** *Before using you should check which ThePirateBay domain works for you, as this varies from country to country.*
 ## Search
 ```python
 # Quick search for torrents, returns a Torrents object
