@@ -29,7 +29,7 @@ t = TPB()
 torrents = t.search('public domain')
 
 # See how many torrents were found
-print('There were {0} torrents found.'.format(len(torrents))
+print('There were {0} torrents found.'.format(len(torrents)))
 
 # Iterate through list of torrents and print info for Torrent object
 for torrent in torrents:
@@ -37,7 +37,7 @@ for torrent in torrents:
 
 # Customize your search
 from tpblite import CATEGORIES, ORDERS
-torrents = t.search('public domain', page=2, order=ORDERS.NAME.DEC, category=CATEGORIES.VIDEO.MOVIES)
+torrents = t.search('public domain', page=2, order=ORDERS.NAME.DES, category=CATEGORIES.VIDEO.MOVIES)
 
 # Get the most seeded torrent based on a filter
 torrent = torrents.getBestTorrent(min_seeds=30, min_filesize='500 MiB', max_filesize='4 GiB')
@@ -51,7 +51,7 @@ print(torrent.magnetlink)
 ## Browse
 ```python
 # You can browse all of the torrents from a single category
-torrents = t.browse(category=CATEGORIES.VIDEOS)
+torrents = t.browse(category=CATEGORIES.VIDEO)
 # Customize the page number and sort order
 torrents = t.browse(category=CATEGORIES.VIDEO.MOVIES, page=1, order=ORDERS.UPLOADED.DES)
 ```
@@ -72,7 +72,7 @@ torrents = t.top(category=CATEGORIES.GAMES.ALL, last_48=True)
 ```python
 # To print all available categories, use the classmethod printOptions
 CATEGORIES.printOptions()
-# Or just a subset of categories, like VIDEOS
+# Or just a subset of categories, like VIDEO
 CATEGORIES.VIDEO.printOptions()
 # Similarly for the sort order
 ORDERS.printOptions()
