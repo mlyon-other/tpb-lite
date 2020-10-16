@@ -18,7 +18,7 @@ Usage
 from tpblite import TPB
 
 # Create a TPB object with a domain name
-t = TPB('https://thepiratebay.org')
+t = TPB('https://tpb.party')
 
 # Or create a TPB object with default domain
 t = TPB()
