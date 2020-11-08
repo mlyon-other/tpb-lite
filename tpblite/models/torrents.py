@@ -71,13 +71,10 @@ class Torrent:
 
     def _getVip(self):
         image_name = self.html_row.xpath('.//img/@src')[1]
-        print('shalom')
-        print(image_name)
         return 'vip' in image_name
 
     def _getTrusted(self):
         image_name = self.html_row.xpath('.//img/@src')[1]
-        print(image_name)
         return 'trusted' in image_name
 
 
