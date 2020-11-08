@@ -34,6 +34,8 @@ class Torrent:
         ) = self._getFileInfo()
         self.magnetlink = self._getMagnetLink()
         self.url = self._getUrl()
+        self.is_vip = self._getVip()
+        self.is_trusted = self._getTrusted()
 
     def __str__(self):
         return "{0}, S: {1}, L: {2}, {3}".format(
@@ -66,6 +68,17 @@ class Torrent:
     def _getUrl(self):
         tag = self.html_row.find('.//a[@class="detLink"]')
         return tag.get("href")
+
+    def _getVip(self):
+        image_name = self.html_row.xpath('.//img/@src')[1]
+        print('shalom')
+        print(image_name)
+        return 'vip' in image_name
+
+    def _getTrusted(self):
+        image_name = self.html_row.xpath('.//img/@src')[1]
+        print(image_name)
+        return 'trusted' in image_name
 
 
 class Torrents:
