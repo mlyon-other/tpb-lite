@@ -5,11 +5,10 @@ import lxml.etree as ET
 def fileSizeStrToInt(size_str):
     """Converts file size given in *iB format to bytes integer"""
 
-    unit_dict = {"KiB": (2 ** 10), "MiB": (2 ** 20), "GiB": (2 ** 30), "TiB": (2 ** 40)}
+    unit_dict = {"B": 1, "KiB": (2 ** 10), "MiB": (2 ** 20), "GiB": (2 ** 30), "TiB": (2 ** 40)}
     try:
-        num = float(size_str[:-3])
-        unit = size_str[-3:]
-        return int(num * unit_dict[unit])
+        (num, unit) = size_str.split()
+        return int(float(num) * unit_dict[unit])
     except Exception as e:
         raise AttributeError(
             "Cannot determine filesize: {0}, error: {1}".format(size_str, e)
