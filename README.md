@@ -101,6 +101,7 @@ You can see how many `Torrent` objects your query has returned, by using the `le
 - `Torrent.url` - URL of the torrent page (str)
 - `Torrent.is_trusted` - Whether the torrent is from a trusted source.
 - `Torrent.is_vip` - Whether the torrent is from a VIP source.
+- `Torrent.infohash` - The info hash of the torrent (str)
 
 Example Workflow
 ==========
