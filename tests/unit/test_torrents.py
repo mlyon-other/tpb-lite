@@ -44,6 +44,12 @@ class TorrentsTestCase(unittest.TestCase):
     def test_byte_size(self):
         self.assertEqual(self.torrents[0].byte_size, 3564822855)
 
+    def test_infohash(self):
+        self.assertEqual(self.torrents[0].infohash, '1a830b92dcb82f40ba3e70b0ca50335b800b3c0c')
+
+    def test_category(self):
+        self.assertEqual(self.torrents[1].category, 'Audio -> Music')
+
     def test_magnetlink(self):
         self.assertEqual(self.torrents[4].magnetlink, 'magnet:?xt=urn:btih:12dce429d8ca04f2b17b28036e11abb2c1239fa6&dn=Fair.Ci')
 

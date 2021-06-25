@@ -6,7 +6,13 @@ import lxml.etree as ET
 def fileSizeStrToInt(size_str):
     """Converts file size given in *iB format to bytes integer"""
 
-    unit_dict = {"B": 1, "KiB": (2 ** 10), "MiB": (2 ** 20), "GiB": (2 ** 30), "TiB": (2 ** 40)}
+    unit_dict = {
+        "B": 1,
+        "KiB": (2 ** 10),
+        "MiB": (2 ** 20),
+        "GiB": (2 ** 30),
+        "TiB": (2 ** 40),
+    }
     try:
         (num, unit) = size_str.split()
         return int(float(num) * unit_dict[unit])
@@ -26,17 +32,14 @@ class Torrent:
         self.html_row = html_row
         self.title = self._getTitle()
         self.seeds, self.leeches = self._getPeers()
-        (
-            self.upload_date,
-            self.filesize,
-            self.byte_size,
-            self.uploader,
-        ) = self._getFileInfo()
+        self.upload_date, self.filesize, self.uploader = self._getFileInfo()
+        self.byte_size = self._getByteSize()
         self.magnetlink = self._getMagnetLink()
         self.url = self._getUrl()
         self.is_vip = self._getVip()
         self.is_trusted = self._getTrusted()
-        self.infohash = self._getInfohash(self.magnetlink)
+        self.infohash = self._getInfohash()
+        self.category = self._getCategory()
 
     def __str__(self):
         return "{0}, S: {1}, L: {2}, {3}".format(
@@ -62,9 +65,11 @@ class Torrent:
         t = text.split(",")
         uptime = unicodedata.normalize("NFKD", t[0].replace("Uploaded ", "").strip())
         size = unicodedata.normalize("NFKD", t[1].replace("Size ", "").strip())
-        byte_size = fileSizeStrToInt(size)
         uploader = unicodedata.normalize("NFKD", t[2].replace("ULed by ", "").strip())
-        return uptime, size, byte_size, uploader
+        return uptime, size, uploader
+
+    def _getByteSize(self):
+        return fileSizeStrToInt(self.filesize)
 
     def _getUrl(self):
         tag = self.html_row.find('.//a[@class="detLink"]')
@@ -77,10 +82,15 @@ class Torrent:
     def _getTrusted(self):
         image_name = self.html_row.xpath('.//img/@src')[1]
         return 'trusted' in image_name
-    
-    def _getInfohash(self, magnetLink):
-        infoHash = re.search(r'btih:(.*?)&dn', magnetLink)
-        return infoHash.group(1) if infoHash else None
+
+    def _getInfohash(self):
+        infohash = re.search(r'btih:(.*?)&dn', self.magnetlink)
+        return infohash.group(1) if infohash else None
+
+    def _getCategory(self):
+        taglist = self.html_row.xpath('.//a[@title="More from this category"]/text()')
+        return '{} -> {}'.format(taglist[0], taglist[1]) if len(taglist) == 2 else None
+
 
 class Torrents:
     """
