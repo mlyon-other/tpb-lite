@@ -1,3 +1,4 @@
+import re
 import unicodedata
 import lxml.etree as ET
 
@@ -35,6 +36,7 @@ class Torrent:
         self.url = self._getUrl()
         self.is_vip = self._getVip()
         self.is_trusted = self._getTrusted()
+        self.infohash = self._getInfohash(self.magnetlink)
 
     def __str__(self):
         return "{0}, S: {1}, L: {2}, {3}".format(
@@ -75,7 +77,10 @@ class Torrent:
     def _getTrusted(self):
         image_name = self.html_row.xpath('.//img/@src')[1]
         return 'trusted' in image_name
-
+    
+    def _getInfohash(self, magnetLink):
+        infoHash = re.search(r'btih:(.*?)&dn', magnetLink)
+        return infoHash.group(1) if infoHash else None
 
 class Torrents:
     """
